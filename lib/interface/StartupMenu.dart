@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:split_app/Constant.dart';
+import 'package:split_app/modele/project.dart';
 
 class StartupMenu extends StatefulWidget {
   @override
@@ -13,19 +15,45 @@ class StartupMenu extends StatefulWidget {
 
 class StartupMenuPage extends State<StartupMenu> {
   List<Widget> menuItems;
-  String jsonSaveContent;
 
   @override
   Future initState() async {
-
-    jsonSaveContent = await getJsonSaveContentFromSharedPreferences();
+    String jsonSaveContent = await getJsonSaveContentFromSharedPreferences();
+    List<Project> projects = await getSavedProject(jsonSaveContent);
+    parseProjectInWidgetMenu(projects);
 
     super.initState();
   }
 
-  Future<String> getJsonSaveContentFromSharedPreferences()async {
+  void parseProjectInWidgetMenu(List<Project> projects) {
+    for (Project project in projects) {
+      menuItems.add(
+        ListTile(
+          title: Text(project.name),
+          onTap: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
+  }
+
+  Future<String> getJsonSaveContentFromSharedPreferences() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(Constant.SP_KEY_SAVES);
+  }
+
+  Future<List<Project>> getSavedProject(String jsonContent) async {
+    List<Project> projects = new List<Project>();
+    var jsonProjects = json.decode(jsonContent);
+
+    for (String json in jsonProjects) {
+      Project project = new Project();
+      project.fromJson(json);
+      projects.add(project);
+    }
+
+    return projects;
   }
 
   @override
