@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:split_app/interface/StartupMenu.dart';
+import 'package:split_app/interface/SliderMenu.dart';
 
 void main() => runApp(new MyApp());
 
@@ -11,8 +11,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new StartupMenu(),
+      home: new SliderMenu(),
     );
   }
 }
-
