@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:split_app/Handler/ProjectHandler.dart';
+import 'package:split_app/interface/Project/ProjectView.dart';
 import 'package:split_app/interface/StartupMenu.dart';
 import 'package:split_app/modele/project.dart';
 
@@ -10,6 +11,8 @@ class SliderMenu extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new SliderMenuPage();
 }
+
+Widget view = new StartupMenu();
 
 class SliderMenuPage extends State<SliderMenu> {
   List<Widget> menuItems;
@@ -57,7 +60,7 @@ class SliderMenuPage extends State<SliderMenu> {
           children: menuItems,
         ),
       ),
-      body: new StartupMenu(),
+      body: view,
     );
   }
 
@@ -95,7 +98,9 @@ class SliderMenuPage extends State<SliderMenu> {
         ListTile(
           title: Text(project.name),
           onTap: () {
+            view = new ProjectView(project);
             Navigator.pop(context);
+            setState(() {});
           },
         ),
       );
